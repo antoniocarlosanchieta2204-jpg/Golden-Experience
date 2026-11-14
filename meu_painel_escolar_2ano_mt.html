@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#24364b">
+<title>Meu Painel Escolar — 2º Ano MT</title>
+<style>
+:root{--navy:#24364b;--blue:#e3edf9;--green:#e7f2d8;--purple:#eee5f5;--yellow:#fff1c2;--pink:#f8dfe1;--orange:#fbe2c7;--line:#d7dce3;--bg:#f5f7fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px system-ui,-apple-system,Segoe UI,sans-serif;color:#172334}
+header{background:var(--navy);color:white;padding:22px 16px}header h1{margin:0;font-size:24px}header p{margin:5px 0 0;color:#d8e3ef}
+main{max-width:900px;margin:auto;padding:14px}.tabs{display:flex;gap:7px;overflow:auto;padding:4px 0 12px}
+.tabs button{border:1px solid var(--line);background:white;border-radius:10px;padding:10px 13px;white-space:nowrap;color:#24364b;font-weight:600}
+.tabs button.active{background:var(--navy);color:white}
+.panel{display:none}.panel.active{display:block}.card{background:white;border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+h2{font-size:20px;margin:8px 0}h3{font-size:16px;margin:0 0 8px}
+label{display:block;font-size:13px;font-weight:650;margin:9px 0 4px}
+input,textarea,select{width:100%;padding:11px;border:1px solid #cbd3dd;border-radius:9px;font:inherit;background:white}
+textarea{min-height:75px;resize:vertical}
+button.primary{background:var(--navy);color:white;border:0;border-radius:9px;padding:11px 14px;font-weight:650;margin-top:10px}
+button.danger{background:#fff0f0;color:#9b2222;border:1px solid #f0caca;border-radius:8px;padding:7px 10px}
+.item{border:1px solid var(--line);border-radius:10px;padding:12px;margin:8px 0;background:white}
+.small{font-size:12px;color:#64748b}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.stat{background:white;border:1px solid var(--line);border-radius:12px;padding:14px}.stat b{font-size:25px;display:block}
+.day{margin:12px 0}.period{display:grid;grid-template-columns:105px 1fr;gap:8px;padding:10px;border-radius:8px;margin:5px 0;background:var(--blue);align-items:center}.period:nth-child(odd){filter:brightness(.99)}.period.break{background:#e8e8e8;justify-content:center;text-align:center;font-weight:700}
+.subject{font-weight:650}.teacher{font-size:13px;color:#526071}
+.check{display:flex;align-items:center;gap:7px;font-size:13px}.check input{width:auto}
+@media(min-width:650px){.stats{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><h1>Meu Painel Escolar</h1><p>Ensino Médio · 2º Ano MT</p></header>
+<main>
+<nav class="tabs">
+<button class="active" data-tab="inicio">Início</button><button data-tab="aulas">Aulas</button><button data-tab="atividades">Atividades</button><button data-tab="portfolio">Portfólios</button><button data-tab="horario">Horário</button>
+</nav>
+<section id="inicio" class="panel active">
+<h2>Visão geral</h2><div class="stats">
+<div class="stat"><b id="nAulas">0</b><span class="small">Aulas registradas</span></div>
+<div class="stat"><b id="nPendentes">0</b><span class="small">Atividades pendentes</span></div>
+<div class="stat"><b id="nGeral">0</b><span class="small">Portfólio geral</span></div>
+<div class="stat"><b id="nDefesa">0</b><span class="small">Portfólio de defesa</span></div></div>
+<div class="card"><h3>Como usar</h3><p>Registre o conteúdo de cada aula, acompanhe tarefas e organize os itens dos dois portfólios. O horário da turma já está preenchido.</p><p class="small">Os dados ficam salvos neste navegador/dispositivo. Se limpar os dados do navegador ou trocar de aparelho, faça uma cópia dos seus registros antes.</p></div>
+</section>
+<section id="aulas" class="panel">
+<h2>Registro de aulas</h2><div class="card">
+<label>Data</label><input id="lessonDate" type="date"><label>Matéria</label><input id="lessonSubject" placeholder="Ex.: Matemática">
+<label>Assunto dado em aula</label><textarea id="lessonTopic" placeholder="Conteúdo estudado..."></textarea>
+<label>Observações (opcional)</label><textarea id="lessonNotes" placeholder="Páginas, explicações, lembretes..."></textarea>
+<button class="primary" onclick="addLesson()">Salvar aula</button></div><div id="lessonList"></div>
+</section>
+<section id="atividades" class="panel">
+<h2>Atividades</h2><div class="card">
+<label>Nome da atividade</label><input id="taskTitle" placeholder="Ex.: Lista de exercícios">
+<label>Matéria</label><input id="taskSubject" placeholder="Ex.: Física">
+<label>Tipo</label><select id="taskType"><option>Feita em aula</option><option>Para casa</option></select>
+<label>Data ou prazo</label><input id="taskDate" type="date"><button class="primary" onclick="addTask()">Adicionar atividade</button></div><div id="taskList"></div>
+</section>
+<section id="portfolio" class="panel">
+<h2>Portfólios</h2><div class="card">
+<label>Tipo de portfólio</label><select id="portType"><option value="geral">Geral</option><option value="defesa">Defesa</option></select>
+<label>Nome do trabalho/atividade</label><input id="portTitle" placeholder="Ex.: Relatório de pesquisa">
+<div id="bimWrap"><label>Bimestre</label><select id="portBim"><option>1º Bimestre</option><option>2º Bimestre</option><option>3º Bimestre</option><option>4º Bimestre</option></select></div>
+<button class="primary" onclick="addPort()">Adicionar ao portfólio</button></div><div id="portList"></div>
+</section>
+<section id="horario" class="panel">
+<h2>Horário de aulas · 2º Ano MT</h2><p class="small">Segunda a sexta · 7h às 13h · Intervalo: 10h20 às 10h40</p><div id="schedule"></div>
+</section>
+</main>
+<script>
+const defaults = {
+lessons:[],tasks:[],portfolio:[]
+};
+let data;try{data=JSON.parse(localStorage.getItem('painelEscolar2MT'))||defaults}catch(e){data=defaults}
+function save(){localStorage.setItem('painelEscolar2MT',JSON.stringify(data));render()}
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active')}));
+document.getElementById('portType').addEventListener('change',e=>document.getElementById('bimWrap').style.display=e.target.value==='geral'?'block':'none');
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function addLesson(){let subject=lessonSubject.value.trim(),topic=lessonTopic.value.trim();if(!subject||!topic)return alert('Preencha a matéria e o assunto.');data.lessons.push({date:lessonDate.value,subject,topic,notes:lessonNotes.value});lessonSubject.value=lessonTopic.value=lessonNotes.value='';save()}
+function addTask(){let title=taskTitle.value.trim(),subject=taskSubject.value.trim();if(!title||!subject)return alert('Preencha o nome e a matéria.');data.tasks.push({title,subject,type:taskType.value,date:taskDate.value,done:false});taskTitle.value=taskSubject.value=taskDate.value='';save()}
+function addPort(){let title=portTitle.value.trim();if(!title)return alert('Informe o nome do item.');data.portfolio.push({title,type:portType.value,bim:portBim.value,done:false});portTitle.value='';save()}
+function del(group,i){if(confirm('Excluir este registro?')){data[group].splice(i,1);save()}}
+function toggle(group,i){data[group][i].done=!data[group][i].done;save()}
+function render(){
+nAulas.textContent=data.lessons.length;nPendentes.textContent=data.tasks.filter(x=>!x.done).length;nGeral.textContent=data.portfolio.filter(x=>x.type==='geral').length;nDefesa.textContent=data.portfolio.filter(x=>x.type==='defesa').length;
+lessonList.innerHTML=data.lessons.map((x,i)=>`<div class="item"><div class="row"><b>${esc(x.subject)}</b><button class="danger" onclick="del('lessons',${i})">Excluir</button></div><p>${esc(x.topic)}</p><p class="small">${esc(x.date||'Sem data')} ${x.notes?' · '+esc(x.notes):''}</p></div>`).reverse().join('')||'<p class="small">Nenhuma aula registrada ainda.</p>';
+taskList.innerHTML=data.tasks.map((x,i)=>`<div class="item"><div class="row"><b>${esc(x.subject)}</b><button class="danger" onclick="del('tasks',${i})">Excluir</button></div><p>${esc(x.title)}</p><p class="small">${esc(x.type)} · ${esc(x.date||'Sem prazo')}</p><label class="check"><input type="checkbox" ${x.done?'checked':''} onchange="toggle('tasks',${i})"> Concluída</label></div>`).reverse().join('')||'<p class="small">Nenhuma atividade cadastrada.</p>';
+let out='';['geral','defesa'].forEach(type=>{out+=`<h3>${type==='geral'?'Portfólio Geral':'Portfólio de Defesa'}</h3>`;let groups=type==='geral'?['1º Bimestre','2º Bimestre','3º Bimestre','4º Bimestre']:['Itens'];groups.forEach(g=>{let arr=data.portfolio.map((x,i)=>({...x,i})).filter(x=>x.type===type&&(type==='defesa'||x.bim===g));out+=`<div class="card"><b>${g}</b>${arr.map(x=>`<div class="item"><div class="row"><span>${esc(x.title)}</span><button class="danger" onclick="del('portfolio',${x.i})">Excluir</button></div><label class="check"><input type="checkbox" ${x.done?'checked':''} onchange="toggle('portfolio',${x.i})"> Incluído no portfólio</label></div>`).join('')||'<p class="small">Nenhum item cadastrado.</p>'}</div>`})});portList.innerHTML=out;
+}
+const times=['7:00 às 7:50','7:50 às 8:40','8:40 às 9:30','9:30 às 10:20','10:20 às 10:40','10:40 às 11:30','11:30 às 12:20','12:20 às 13:00'];
+const days=[
+['Segunda-feira',['Núcleo Comum|José','Matemática|Gleidson','Matemática|Gleidson','Linguagens|João Marcelo','INTERVALO','Matemática|Gleidson','Linguagens|Monize','Núcleo Comum|João Marcelo']],
+['Terça-feira',['Ciências da Natureza|Júnior e Camila','Ciências da Natureza|Júnior e Camila','Linguagens|Paulo','Linguagens|Paulo e Lise','INTERVALO','Cultura Digital|Gleidson','Cultura Digital|Gleidson','Ciências da Natureza|Bruna']],
+['Quarta-feira',['Núcleo Comum|Monize','Iniciação Científica|Rafael','Iniciação Científica|Rafael','Linguagens|Paulo, Lucas e João','INTERVALO','Ciências da Natureza|Bruna e Camila','Ciências da Natureza|Bruna','Linguagens|João Marcelo']],
+['Quinta-feira',['Linguagens|Monize','Matemática|Gleidson','Ciências Humanas|José e Gisely','Ciências Humanas|José e Gisely','INTERVALO','Linguagens|João Marcelo','Ciências Humanas|Vera e Daniele','Ciências Humanas|Vera e Daniele']],
+['Sexta-feira',['Mídias sociais|Ricardo','Mídias sociais|Ricardo','Ciências da Natureza|Bruna e Camila','Núcleo Comum|João Marcelo','INTERVALO','Matemática|Gleidson','Matemática|Gleidson','Projeto de Vida|Lise']]
+];
+schedule.innerHTML=days.map(([day,lessons])=>`<div class="day card"><h3>${day}</h3>${lessons.map((s,i)=>s==='INTERVALO'?`<div class="period break"><span>${times[i]} · INTERVALO</span></div>`:`<div class="period"><span class="small">${times[i]}</span><span><span class="subject">${esc(s.split('|')[0])}</span><br><span class="teacher">${esc(s.split('|')[1])}</span></span></div>`).join('')}</div>`).join('');
+render();
+</script>
+</body></html>
